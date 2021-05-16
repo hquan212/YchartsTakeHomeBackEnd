@@ -1,9 +1,9 @@
-# Ychart take home challenge 3
+# Ychart Take Home Challenge 3
 
 ## Back-End challenge
 
 In this challenge, I wrote the Reconciliation class which takes in the recon.in file, parses the instructions, performs
-the transaction steps and then compares the output from the transactions vs the second days positions input.
+the transaction steps and then compares the output from the transactions vs the next days positions input.
 
 This will perform the unit reconciliation that will display the differences between the two positions and whether or not
 we need to go back and find out if we are missing input data.
@@ -19,7 +19,7 @@ type:
 
 ## Assumptions
 
-This project assumes that you can sell a stock that you do now own. _short shell_ the stock.
+This project assumes that you can sell a stock that you do not own (_short shell_ the stock).
 It also assumes that the data input will always have the same format.
 
 To calculated reconciliation will be a file called recon.out under the output directory.
