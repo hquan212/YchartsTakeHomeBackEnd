@@ -16,3 +16,10 @@ to run via python command line:
 type:
 
 > python3 src/main.py input/recon.in
+
+## Assumptions
+
+This project assumes that you can sell a stock that you do now own. _short shell_ the stock.
+It also assumes that the data input will always have the same format.
+
+To calculated reconciliation will be a file called recon.out under the output directory.

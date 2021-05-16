@@ -62,8 +62,8 @@ class Recon:
         """
         newAccount = Account(typeOfCommand[0])
         for command in typeOfCommand[1:]:
-            assetTicket, assetValue = command.split()
-            newAccount.addAsset(assetTicket, assetValue)
+            symbol, assetValue = command.split()
+            newAccount.addAsset(symbol, assetValue)
         return newAccount
 
     def runTransactions(self, account, transactions):
@@ -73,14 +73,14 @@ class Recon:
         transactionId = transactions[0]
         for transaction in transactions[1:]:
             actionList  = transaction.split()
-            assetTicket = actionList[0]
-            commandType = actionList[1]
-            assetAmount = actionList[2]
-            cashAmount  = actionList[3]
-            if commandType.upper() in self.positiveCashActions:
-                account.positiveCashAction(assetTicket, assetAmount, cashAmount)
-            elif commandType.upper() in self.negativeCashActions:
-                account.negativeCashAction(assetTicket, assetAmount, cashAmount)
+            symbol = actionList[0]
+            transactionCode = actionList[1]
+            shareAmount = actionList[2]
+            totalValue  = actionList[3]
+            if transactionCode.upper() in self.positiveCashActions:
+                account.positiveCashAction(symbol, shareAmount, totalValue)
+            elif transactionCode.upper() in self.negativeCashActions:
+                account.negativeCashAction(symbol, shareAmount, totalValue)
         account.setDate(account.getDate().split('-')[0] + "-ACT")  # section actual amount name after transactions
 
     def unitReconciliation(self):
@@ -116,9 +116,13 @@ class Recon:
         """
         Writes out to recon.out file.
         """
+        print("-====================== Unit Reconciliation ==========================================")
+
         with open(self.reconOutFileLocation, 'w') as fp: 
             cashLine = 'Cash ' +  str(totalCash) + '\n'
+            print(cashLine)
             fp.write(cashLine)
             for ticket, amount in sharesDict.items():
                 ticketLine = ticket + ' ' + str(amount) + '\n'
+                print(ticketLine)
                 fp.write(ticketLine)
