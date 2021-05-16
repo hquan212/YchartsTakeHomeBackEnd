@@ -5,15 +5,12 @@ from Account import Account
 
 class Recon:
     """
-    This is the main Reconciliation class.
-    Attributes:
-
+        Class Recon
+            It will read in the instruction set from recon.in and
+            it will create two Account objects and update accordingly
+            and perform updates based on transactions instructions.
     """
     def __init__(self, fileLocations=None):
-        """
-        The constructor for Recon class.
-        Parameters:
-        """
         self.reconInFileLocation = fileLocations
         self.reconOutFileLocation = './output/recon.out'
         self.AccountA = None
@@ -24,7 +21,7 @@ class Recon:
 
     def __groupCommands(self, sequence, sep=""):
         """
-        Method to read in commands from recon file and create command blocks.
+        Private method to create command blocks.
         """
         group = []
         for element in sequence:
@@ -37,7 +34,8 @@ class Recon:
 
     def initializeState(self):
         """
-        Method to read in commands from recon file and create command blocks.
+        Method to read in commands from recon file.
+        Will execute the run command to update Accounts.
         """
         commandBlocks = []
         with open(self.reconInFileLocation) as fp:
@@ -50,13 +48,13 @@ class Recon:
         """
         Method to run each command block. Creates respective accounts and runs Transactions
         """
-        
         self.AccountA = self.initializeNewAccount(commandBlocksList[0])
         self.runTransactions(self.AccountA, commandBlocksList[1])
         self.AccountB = self.initializeNewAccount(commandBlocksList[2])
-
         if self.AccountA and self.AccountB:
-            self.unitReconcilliation()
+            self.unitReconciliation()
+        else:
+            print("Missing account two reconcile. Please check input file.")
 
     def initializeNewAccount(self, typeOfCommand):
         """
@@ -68,8 +66,10 @@ class Recon:
             newAccount.addAsset(assetTicket, assetValue)
         return newAccount
 
-
     def runTransactions(self, account, transactions):
+        """
+        Method to run every transaction command and update account. Will check for positive cash case or negative.
+        """
         transactionId = transactions[0]
         for transaction in transactions[1:]:
             actionList  = transaction.split()
@@ -83,9 +83,9 @@ class Recon:
                 account.negativeCashAction(assetTicket, assetAmount, cashAmount)
         account.setDate(account.getDate().split('-')[0] + "-ACT")  # section actual amount name after transactions
 
-    def unitReconcilliation(self):
+    def unitReconciliation(self):
         """
-            Run reconcilliation. AccountB from AccountA. Produce new account C to reconOut
+            Run Unit Reconciliation. AccountB from AccountA. Produce new AccountC and write to recon.out file
         """
         self.AccountA.showInfo()
         self.AccountB.showInfo()
@@ -113,7 +113,9 @@ class Recon:
         self.writeToReconOutFile(sharesC, totalCash)
 
     def writeToReconOutFile(self, sharesDict, totalCash):
-
+        """
+        Writes out to recon.out file.
+        """
         with open(self.reconOutFileLocation, 'w') as fp: 
             cashLine = 'Cash ' +  str(totalCash) + '\n'
             fp.write(cashLine)

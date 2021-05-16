@@ -2,7 +2,11 @@
 
 
 class Account:
-
+    """
+        Class Account:
+            Object that can store a running cash balance, dictionary collection of assets under 
+            portolio and unique date name.
+    """
     def __init__(self, date=None):
         self.__date = date 
         self.__shares = {} 
@@ -19,11 +23,14 @@ class Account:
 
     def getDate(self):
         return self.__date
-        
+
     def addAsset(self, ticket, amount):
+        """
+            Method to add a new asset to this account. Will 
+        """
         amount = float(amount)
         if ticket.lower() == 'cash':
-            self.__cash += amount
+            self.addCashAmount(amount)
             return
         if ticket in self.__shares:
             self.__shares[ticket] += amount
@@ -32,13 +39,15 @@ class Account:
 
     def addCashAmount(self, cashAmount):
         self.__cash += float(cashAmount)
-        return 
 
     def removeCashAmount(self, cashAmount):
         self.__cash -= float(cashAmount)
-        return 
 
     def positiveCashAction(self, ticket, assetAmount, cashAmount):
+        """
+            If the overall cash balance increases, use this method to update Account object.
+            Keywords: Sell, Dividend, Deposit
+        """
         if ticket.lower() == 'cash':
             self.addCashAmount(cashAmount)
             return
@@ -50,6 +59,10 @@ class Account:
         return 
 
     def negativeCashAction(self, ticket, assetAmount, cashAmount):
+        """
+            If the overall cash balance decreases, use this method to update Account object.
+            Keywords: Buy, Fee
+        """
         if ticket.lower() == 'cash':
             self.removeCashAmount(cashAmount)
             return
@@ -62,6 +75,9 @@ class Account:
         return 
     
     def clearEmptyAssets(self, ticket):
+        """
+            Removes an empty asset from the shares list.
+        """
         if self.__shares[ticket] == 0:
             del self.__shares[ticket]
 
