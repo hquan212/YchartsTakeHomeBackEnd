@@ -12,3 +12,4 @@ if __name__ == "__main__":
         raise SystemExit
     
     recon = Recon(reconInLocation)
+    recon.setup()

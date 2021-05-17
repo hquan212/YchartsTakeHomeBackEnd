@@ -17,7 +17,6 @@ class Recon:
         self.AccountB = None
         self.positiveCashActions = ['SELL', 'DIVIDEND', 'DEPOSIT']
         self.negativeCashActions = ['BUY', 'FEE']
-        self.initializeState()
 
     def __groupCommands(self, sequence, sep=""):
         """
@@ -32,7 +31,7 @@ class Recon:
             group.append(element)
         yield group
 
-    def initializeState(self):
+    def setup(self):
         """
         Method to read in commands from recon file.
         Will execute the run command to update Accounts.
@@ -81,7 +80,7 @@ class Recon:
                 account.positiveCashAction(symbol, shareAmount, totalValue)
             elif transactionCode.upper() in self.negativeCashActions:
                 account.negativeCashAction(symbol, shareAmount, totalValue)
-        account.setDate(account.getDate().split('-')[0] + "-ACT")  # section actual amount name after transactions
+        account.setDate("D1-ACT")  # section actual amount name after transactions
 
     def unitReconciliation(self):
         """
@@ -92,16 +91,15 @@ class Recon:
 
         sharesA = self.AccountA.getShares()
         sharesB = self.AccountB.getShares()
-        allKeys = copy.deepcopy(sharesB)
+        allTickets = set(sharesB).union(set(sharesA))
         sharesC = {}
-        allKeys.update(sharesA)
-        
-        for ticket in allKeys.keys():
+
+        for ticket in allTickets:
             if ticket in sharesB and ticket in sharesA: 
-                differenceAmount =sharesB[ticket] - sharesA[ticket]
+                differenceAmount = sharesB[ticket] - sharesA[ticket]
                 if int(differenceAmount) == 0:
                     continue
-                sharesC[ticket] = sharesB[ticket] - sharesA[ticket]
+                sharesC[ticket] = differenceAmount
             elif ticket in sharesB and ticket not in sharesA: 
                 sharesC[ticket] = sharesB[ticket]
             elif ticket not in sharesB and ticket in sharesA: 
