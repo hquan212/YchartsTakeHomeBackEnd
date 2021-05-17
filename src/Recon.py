@@ -1,6 +1,5 @@
 # Robert Quan Ycharts Take Home
 
-import copy
 from Account import Account
 
 class Recon:
